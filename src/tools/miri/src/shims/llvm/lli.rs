@@ -146,7 +146,7 @@ impl LLI {
         args: &[OpTy<'tcx>],
         dest: &PlaceTy<'tcx>,
     ) -> InterpResult<'tcx> {
-        debug!(
+        print!(
             "Calling {:?}: {:?}",
             function.get_name(),
             function.get_type().print_to_string().to_string()
@@ -194,6 +194,7 @@ impl LLI {
                     ThreadLinkDestination::ToMiriDefault(dest.clone()),
                 )
             };
+            
             debug!("link={}, sret={:?}", thread_link_destination, has_sret);
             let converter = LLVMArgumentConverter::new(
                 this,

@@ -109,10 +109,21 @@ impl Default for ForeignMemoryMode {
 }
 
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct LLIConfig {
     pub alignment_check_mode: ForeignAlignmentCheckMode,
     pub memory_mode: ForeignMemoryMode,
+    pub expansion: bool,
+}
+
+impl Default for LLIConfig {
+    fn default() -> Self {
+        LLIConfig {
+            alignment_check_mode: ForeignAlignmentCheckMode::default(),
+            memory_mode: ForeignMemoryMode::default(),
+            expansion: true,
+        }
+    }
 }
 
 /// Configuration needed to spawn a Miri instance.

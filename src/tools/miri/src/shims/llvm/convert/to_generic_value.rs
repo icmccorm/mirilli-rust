@@ -93,6 +93,7 @@ impl<'tcx, 'lli> LLVMArgumentConverter<'tcx, 'lli> {
             } else {
                 self.peek_type().map(|f| *f).flatten()
             };
+            print!("Rust type: {:?}, ", current_arg.layout().ty);
             if let Some(llvm_type) = next_llvm_type {
                 if self.can_expand_aggregate(this, &current_arg, &llvm_type)? {
                     if let Some(mut fields) = self.expand_aggregate(this, &current_arg)? {
@@ -119,21 +120,23 @@ impl<'tcx, 'lli> LLVMArgumentConverter<'tcx, 'lli> {
         llvm_type: &BasicTypeEnum<'_>,
     ) -> InterpResult<'tcx, bool> {
         let this = ctx.eval_context_ref();
-        let llvm_type_size = this.resolve_llvm_type_size(*llvm_type)?;
-        let rust_type_size = rust_arg.layout().size.bytes();
-        let num_types_remaining = self.llvm_types.len();
-        if llvm_type_size < rust_type_size && num_types_remaining > 0 {
-            if matches!(*llvm_type, BasicTypeEnum::PointerType(_)) && !rust_arg.is_immediate() {
-                return Ok(false);
-            }
-            let is_homogenous = rust_arg.layout().homogeneous_aggregate(this);
-            if let Ok(HomogeneousAggregate::Homogeneous(_)) = is_homogenous {
-                let not_union = !(matches!(rust_arg.layout().fields, FieldsShape::Union(_)));
-                let inhabited = !rust_arg.abi().is_uninhabited();
-                let not_scalar = !rust_arg.abi().is_scalar();
-                let field_count = rust_arg.layout().fields.count();
-                if not_union && inhabited && not_scalar && field_count <= (num_types_remaining) {
-                    return Ok(true);
+        if this.machine.lli_config.expansion {
+            let llvm_type_size = this.resolve_llvm_type_size(*llvm_type)?;
+            let rust_type_size = rust_arg.layout().size.bytes();
+            let num_types_remaining = self.llvm_types.len();
+            if llvm_type_size < rust_type_size && num_types_remaining > 0 {
+                if matches!(*llvm_type, BasicTypeEnum::PointerType(_)) && rust_arg.is_immediate() {
+                    return Ok(false);
+                }
+                let is_homogenous = rust_arg.layout().homogeneous_aggregate(this);
+                if let Ok(HomogeneousAggregate::Homogeneous(_)) = is_homogenous {
+                    let not_union = !(matches!(rust_arg.layout().fields, FieldsShape::Union(_)));
+                    let inhabited = !rust_arg.abi().is_uninhabited();
+                    let not_scalar = !rust_arg.abi().is_scalar();
+                    let field_count = rust_arg.layout().fields.count();
+                    if not_union && inhabited && not_scalar && field_count <= (num_types_remaining) {
+                        return Ok(true);
+                    }
                 }
             }
         }

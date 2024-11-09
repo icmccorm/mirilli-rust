@@ -594,6 +594,8 @@ fn main() {
                 "full" => BacktraceStyle::Full,
                 _ => show_error!("-Zmiri-backtrace may only be 0, 1, or full"),
             };
+        } else if arg == "-Zmiri-llvm-disable-expansion" {
+            miri_config.lli_config.expansion = false
         } else if arg == "-Zmiri-llvm-enable-alignment-check-all" {
             miri_config.lli_config.alignment_check_mode = ForeignAlignmentCheckMode::Check
         } else if arg == "-Zmiri-llvm-enable-alignment-check-rust" {
