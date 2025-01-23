@@ -25,8 +25,8 @@ use std::num::NonZero;
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use walkdir::WalkDir;
 use tracing::debug;
+use walkdir::WalkDir;
 
 use rustc_data_structures::sync::Lrc;
 use rustc_driver::Compilation;
@@ -47,7 +47,7 @@ use rustc_session::{CtfeBacktrace, EarlyDiagCtxt};
 
 use miri::{
     BacktraceStyle, BorrowTrackerMethod, ForeignAlignmentCheckMode, ForeignMemoryMode,
-    ProvenanceMode, RetagFields,
+    LLVMLoggingLevel, ProvenanceMode, RetagFields,
 };
 
 struct MiriCompilerCalls {
@@ -594,6 +594,8 @@ fn main() {
                 "full" => BacktraceStyle::Full,
                 _ => show_error!("-Zmiri-backtrace may only be 0, 1, or full"),
             };
+        } else if arg == "-Zmiri-llvm-log" {
+            miri_config.llvm_log = Some(LLVMLoggingLevel::Flags);
         } else if arg == "-Zmiri-llvm-disable-expansion" {
             miri_config.lli_config.expansion = false
         } else if arg == "-Zmiri-llvm-enable-alignment-check-all" {
@@ -616,7 +618,7 @@ fn main() {
                         "-Zmiri-extern-bc-file= is already set to {}",
                         other_filename.display()
                     );
-                }else{
+                } else {
                     miri_config.singular_llvm_bc_file = Some(filename_path);
                 }
             } else {
