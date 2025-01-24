@@ -318,7 +318,7 @@ impl<'tcx, 'lli> ConversionContext<'tcx, 'lli> {
                                 }
                             }
                         },
-                    BasicTypeEnum::IntType(it) => {
+                    BasicTypeEnum::IntType(_) => {
                         let converted_int = generic.as_int();
                         let byte_width = Size::from_bytes(miri.resolve_llvm_type_size(llvm_type)?);
                         if miri.is_pointer_convertible(&self.rust_layout) {
