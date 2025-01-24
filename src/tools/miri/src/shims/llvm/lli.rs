@@ -146,11 +146,6 @@ impl LLI {
         args: &[OpTy<'tcx>],
         dest: &PlaceTy<'tcx>,
     ) -> InterpResult<'tcx> {
-        print!(
-            "Calling {:?}: {:?}",
-            function.get_name(),
-            function.get_type().print_to_string().to_string()
-        );
         self.with_engine(|engine| {
             let engine = engine.as_ref().unwrap();
             let this = ctx.eval_context_mut();

@@ -93,7 +93,6 @@ impl<'tcx, 'lli> LLVMArgumentConverter<'tcx, 'lli> {
             } else {
                 self.peek_type().map(|f| *f).flatten()
             };
-            print!("Rust type: {:?}, ", current_arg.layout().ty);
             if let Some(llvm_type) = next_llvm_type {
                 if self.can_expand_aggregate(this, &current_arg, &llvm_type)? {
                     if let Some(mut fields) = self.expand_aggregate(this, &current_arg)? {
@@ -107,7 +106,7 @@ impl<'tcx, 'lli> LLVMArgumentConverter<'tcx, 'lli> {
             generic_args.push(current_arg.to_generic_value(this, next_llvm_type)?);
         }
         if !self.llvm_types.is_empty() {
-            println!("LLVM types remaining: {:?}", self.llvm_types.len());
+            debug!("LLVM types remaining: {:?}", self.llvm_types.len());
             self.error()?;
         }
         Ok(generic_args)
