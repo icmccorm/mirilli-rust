@@ -191,6 +191,15 @@ impl<'tcx, 'lli> ConversionContext<'tcx, 'lli> {
                         match llvm_type {
                             BasicTypeEnum::IntType(_) => {
                                 let destination = self.get_or_create_destination(miri)?;
+                                let byte_width = Size::from_bytes(it.get_byte_width());
+                                if byte_width != self.rust_layout.size
+                                    && byte_width != self.padded_size
+                                {
+                                    throw_llvm_field_width_mismatch!(
+                                        it.get_byte_width(),
+                                        self.rust_layout
+                                    );
+                                }
                                 let field_bytes = generic.as_int().to_ne_bytes();
                                 let field_width: usize =
                                     self.rust_layout.size.bytes().try_into().unwrap();
