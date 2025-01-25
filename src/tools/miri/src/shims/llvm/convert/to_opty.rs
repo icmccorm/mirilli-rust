@@ -189,7 +189,7 @@ impl<'tcx, 'lli> ConversionContext<'tcx, 'lli> {
                     OpTySource::Generic(generic) => {
                         let llvm_type = generic.assert_type_tag();
                         match llvm_type {
-                            BasicTypeEnum::IntType(_) => {
+                            BasicTypeEnum::IntType(it) => {
                                 let destination = self.get_or_create_destination(miri)?;
                                 let byte_width = Size::from_bytes(it.get_byte_width());
                                 if byte_width != self.rust_layout.size
