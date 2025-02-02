@@ -59,3 +59,5 @@ jobs:
         run: src/ci/scripts/setup-upstream-remote.sh
       - name: Build
         run: ./x.py build --stage 1
+      - name: Test - BsanRT
+        run: ./x.py test src/tools/bsan/bsan-rt

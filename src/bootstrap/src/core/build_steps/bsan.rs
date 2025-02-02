@@ -72,7 +72,7 @@ impl Step for Bsan {
         let compiler = self.compiler;
 
         builder.ensure(llvm::Llvm { target });
-        builder.ensure(BsanCore { compiler, target });
+        builder.ensure(BsanRT { compiler, target });
 
         let compiler_rt_dir = builder.src.join("src/llvm-project/compiler-rt");
         if !compiler_rt_dir.exists() {
@@ -176,19 +176,19 @@ pub fn supports_bsan(
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct BsanCore {
+pub struct BsanRT {
     pub compiler: Compiler,
     pub target: TargetSelection,
 }
 
-impl Step for BsanCore {
+impl Step for BsanRT {
     type Output = PathBuf;
     fn should_run(run: ShouldRun<'_>) -> ShouldRun<'_> {
         run.never()
     }
 
     fn make_run(run: RunConfig<'_>) {
-        run.builder.ensure(BsanCore {
+        run.builder.ensure(BsanRT {
             compiler: run.builder.compiler(run.builder.top_stage, run.builder.config.build),
             target: run.target,
         });
