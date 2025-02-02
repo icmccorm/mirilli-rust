@@ -151,7 +151,7 @@ mod tests {
     type TestProv = u8;
 
     impl Provenance for TestProv {}
-    
+
     #[test]
     fn create_and_drop() {
         let _ = ShadowHeap::<TestProv>::default();

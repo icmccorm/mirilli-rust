@@ -13,7 +13,7 @@ use crate::core::build_steps::doc::DocumentationFormat;
 use crate::core::build_steps::synthetic_targets::MirOptPanicAbortSyntheticTarget;
 use crate::core::build_steps::tool::{self, SourceType, Tool};
 use crate::core::build_steps::toolstate::ToolState;
-use crate::core::build_steps::{compile, dist, llvm, bsan};
+use crate::core::build_steps::{bsan, compile, dist, llvm};
 use crate::core::builder::{
     self, Alias, Builder, Compiler, Kind, RunConfig, ShouldRun, Step, crate_description,
 };
@@ -462,7 +462,6 @@ impl Step for BsanRT {
         run_cargo_test(cargo, &[], &[], "bsan-rt", "bsan-rt", compiler, host, builder);
     }
 }
-
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Miri {
