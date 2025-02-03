@@ -8,5 +8,5 @@ fn main() {
         .with_crate(crate_dir.clone())
         .generate()
         .expect("Unable to generate bindings")
-        .write_to_file(Path::new("target").join("libborrowtracker.h"));
+        .write_to_file(Path::new("target").join("bsanrt.h"));
 }

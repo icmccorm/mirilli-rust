@@ -31,8 +31,7 @@ use crate::{Compiler, Kind, Mode, Path, fs, helpers, t};
 /// Running './x.py build sanitizers' builds every single one. Having these separate steps allows us to build
 /// BSAN without building the other sanitizers.
 
-const BSAN_CORE_PATH: &str = "src/tools/bsan/bsan-rt";
-const BSAN_RT_ALIAS: &str = "bsan-rt";
+const BSAN_CORE_PATH: &str = "src/tools/bsan/bsanrt";
 const BSAN_RT_DYLIB: &str = "bsanrt";
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
