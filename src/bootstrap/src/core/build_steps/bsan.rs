@@ -120,7 +120,7 @@ impl Step for Bsan {
         let sysroot = sysroot.display();
         let mut ldflags = LdFlags::default();
         ldflags.push_all(format!("-L{sysroot}"));
-        
+
         configure_cmake(
             builder,
             self.target,

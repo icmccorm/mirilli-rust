@@ -9,11 +9,11 @@ use std::ops::{Add, BitAnd, Deref, DerefMut};
 /// 64-bit platforms only use 48-bits. Following the LLVM Project,
 /// we hard-code these values based on the underlying architecture.
 /// Most, if not all 64 bit architectures use 48-bits. However, a the
-/// Armv8-A spec allows addressing 52 or 56 bits, as well. No processors
+/// Armv8-A spec allows addressing 52 or 56 bits as well. No processors
 /// implement this yet, though, so we can use target_pointer_width.
 
 #[cfg(target_pointer_width = "64")]
-static VA_BITS: usize = 45;
+static VA_BITS: usize = 48;
 
 #[cfg(target_pointer_width = "32")]
 static VA_BITS: usize = 32;
