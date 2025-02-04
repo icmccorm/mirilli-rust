@@ -51,7 +51,7 @@ impl Step for Bsan {
                     builder.build.unstable_features(),
                     |tools| {
                         tools.iter().any(|tool: &String| match tool.as_str() {
-                            x => BSAN_RT_ALIAS == x || BSAN_RT_DYLIB == x,
+                            x => BSAN_RT_DYLIB == x,
                         })
                     },
                 ),
@@ -105,7 +105,6 @@ impl Step for Bsan {
         cfg.define("COMPILER_RT_DEFAULT_TARGET_ONLY", "ON");
         cfg.define("COMPILER_RT_USE_LIBCXX", "OFF");
         cfg.define("LLVM_CONFIG_PATH", &llvm_config);
-
         // On Darwin targets the sanitizer runtimes are build as universal binaries.
         // Unfortunately sccache currently lacks support to build them successfully.
         // Disable compiler launcher on Darwin targets to avoid potential issues.
@@ -121,6 +120,7 @@ impl Step for Bsan {
         let sysroot = sysroot.display();
         let mut ldflags = LdFlags::default();
         ldflags.push_all(format!("-L{sysroot}"));
+        
         configure_cmake(
             builder,
             self.target,
@@ -202,7 +202,7 @@ impl Step for BsanRT {
         builder.ensure(compile::Std::new(compiler, compiler.host));
         builder.ensure(compile::Rustc::new(compiler, target));
 
-        let cargo = prepare_tool_cargo(
+        let mut cargo = prepare_tool_cargo(
             builder,
             compiler,
             mode,
@@ -212,6 +212,7 @@ impl Step for BsanRT {
             SourceType::InTree,
             &Vec::new(),
         );
+        cargo.env("BSAN_HEADER_DIR", builder.cargo_out(compiler, mode, target));
 
         // we check this below
         let build_success = compile::stream_cargo(builder, cargo, vec![], &mut |_| {});
