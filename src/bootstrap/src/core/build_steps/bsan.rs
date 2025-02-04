@@ -14,7 +14,7 @@ use crate::utils::helpers::dylib;
 use crate::{Compiler, Kind, Mode, Path, fs, helpers, t};
 
 /// We need two components to compile BSAN (in addition to LLVM). The first component is the
-/// borrow tracker library (libborrowtracker), which is compiled here in the step BsanBorrowTracker.
+/// borrow tracker library (libbsanrt), which is compiled here in the step BsanBorrowTracker.
 /// This library depends on Miri's borrow tracker implementation. Since Miri relies on a variety of
 /// experimental and unstable features, we cannot build it in stage0; we need to use at least the
 /// stage1 compiler. We need to define a custom build step since we are producing a shared library, and
