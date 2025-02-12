@@ -1,0 +1,25 @@
+change-id = 132494
+
+[build]
+#jobs = 8
+sanitizers = true
+build-stage = 1
+test-stage = 1
+docs = false
+extended = false
+tools = [
+    "libbsan",
+    "bsan",
+    "cargo-bsan",
+    "bsan-rt",
+]
+
+[rust]
+description = "BorrowSanitizer"
+
+[llvm]
+download-ci-llvm = false
+link-shared = true
+
+[target.aarch64-unknown-linux-gnu]
+llvm-config = "/workspaces/evaluation/.devcontainer/LLVM_BuildScripts/llvm_install/bin/llvm-config"
