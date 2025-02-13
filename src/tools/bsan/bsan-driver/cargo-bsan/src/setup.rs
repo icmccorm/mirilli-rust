@@ -44,7 +44,7 @@ pub fn setup(
         }
         None => {
             // Check for `rust-src` rustup component.
-            let rustup_src = rustc_build_sysroot::rustc_sysroot_src(bsan_for_host())
+            let rustup_src = rustc_build_sysroot::rustc_sysroot_src(bsan_driver_for_host())
                 .expect("could not determine sysroot source directory");
             if !rustup_src.exists() {
                 // Ask the user to install the `rust-src` component, and use that.

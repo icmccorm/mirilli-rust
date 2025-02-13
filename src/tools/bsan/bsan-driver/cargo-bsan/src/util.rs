@@ -52,18 +52,18 @@ pub fn cargo() -> Command {
 }
 
 /// Returns the path to the `bsan` binary
-pub fn find_bsan() -> PathBuf {
+pub fn find_bsan_driver() -> PathBuf {
     if let Some(path) = env::var_os("BSAN") {
         return path.into();
     }
     // Assume it is in the same directory as ourselves.
     let mut path = std::env::current_exe().expect("current executable path invalid");
-    path.set_file_name(format!("bsan{}", env::consts::EXE_SUFFIX));
+    path.set_file_name(format!("bsan-driver{}", env::consts::EXE_SUFFIX));
     path
 }
 
-pub fn bsan() -> Command {
-    let mut cmd = Command::new(find_bsan());
+pub fn bsan_driver() -> Command {
+    let mut cmd = Command::new(find_bsan_driver());
     // We never want to inherit this from the environment.
     // However, this is sometimes set in the environment to work around build scripts that don't
     // honor RUSTC_WRAPPER. So remove it again in case it is set.
@@ -71,8 +71,8 @@ pub fn bsan() -> Command {
     cmd
 }
 
-pub fn bsan_for_host() -> Command {
-    let mut cmd = bsan();
+pub fn bsan_driver_for_host() -> Command {
+    let mut cmd = bsan_driver();
     cmd.env("BSAN_BE_RUSTC", "host");
     cmd
 }

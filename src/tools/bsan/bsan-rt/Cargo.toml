@@ -1,5 +1,5 @@
 [package]
-name = "bsanrt"
+name = "bsan-rt"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,11 +7,12 @@ edition = "2021"
 env_logger = "0.11.5"
 jemalloc-sys = "0.5.4"
 log = "0.4.22"
-macros = { path = "macros" }
+smallvec = "1.13.2"
+libc = "0.2.101"
 
 [lib]
-name = "bsanrt"
-crate-type = ["cdylib"] 
+name = "bsan_rt"
+crate-type = ["staticlib"] 
 test = true     # we have unit tests
 doctest = false # but no doc tests
 

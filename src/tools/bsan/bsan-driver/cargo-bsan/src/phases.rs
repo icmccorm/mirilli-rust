@@ -32,8 +32,8 @@ pub fn phase_cargo_bsan(mut args: impl Iterator<Item = String>) {
     let quiet = has_arg_flag("-q") || has_arg_flag("--quiet");
 
     // Determine the involved architectures.
-    let rustc_version = VersionMeta::for_command(bsan_for_host()).unwrap_or_else(|err| {
-        panic!("failed to determine underlying rustc version of BSAN ({:?}):\n{err:?}", bsan())
+    let rustc_version = VersionMeta::for_command(bsan_driver_for_host()).unwrap_or_else(|err| {
+        panic!("failed to determine underlying rustc version of BSAN ({:?}):\n{err:?}", bsan_driver())
     });
 
     let targets = get_arg_flag_values("--target").collect::<Vec<_>>();
@@ -55,7 +55,7 @@ pub fn phase_cargo_bsan(mut args: impl Iterator<Item = String>) {
     setup(&subcommand, &rustc_version.host.as_str(), &rustc_version, verbose, quiet);
 
     let bsan_sysroot = get_sysroot_dir();
-    let bsan_path = find_bsan();
+    let bsan_path = find_bsan_driver();
 
     let cargo_cmd = match subcommand {
         BSANCommand::Forward(s) => s,
@@ -138,7 +138,7 @@ pub fn phase_rustc(args: impl Iterator<Item = String>, phase: RustcPhase) {
 
     let target_crate = is_target_crate();
 
-    let mut cmd = bsan();
+    let mut cmd = bsan_driver();
     // Arguments are treated very differently depending on whether this crate needs to be
     // instrumented by BorrowSanitizer or if it's for a build script / proc macro.
     if target_crate {

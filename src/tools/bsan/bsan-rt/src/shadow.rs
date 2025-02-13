@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 use core::mem;
 use core::ops::{Add, BitAnd, Deref, DerefMut, Shr};
 use std::alloc::{alloc, dealloc};
-use std::vec::Vec;
 
 /// Different targets have a different number
 /// of significant bits in their pointer representation.
@@ -82,14 +81,14 @@ impl<T: Provenance> L2<T> {
 #[repr(C)]
 pub struct L1<T: Provenance> {
     entries: [*mut L2<T>; L1_LEN],
+    chunks: Vec<*mut L2<T>>,
     // We need to keep track of all the chunks that we allocate
     // so that we can deallocate them when the shadow heap is dropped.
-    chunks: Vec<*mut L2<T>>,
 }
 
 impl<T: Provenance> L1<T> {
     fn new() -> Self {
-        Self { entries: [core::ptr::null_mut(); L1_LEN], chunks: Vec::new() }
+        Self { chunks: Vec::new(), entries: [core::ptr::null_mut(); L1_LEN] }
     }
 
     #[inline(always)]
