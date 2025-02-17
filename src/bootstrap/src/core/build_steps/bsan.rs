@@ -128,8 +128,7 @@ impl Step for BsanRT {
         let dst = libdir.join(&runtime.name);
         builder.copy_link(&runtime.path, &dst);
 
-        if target.contains("-apple-")
-        {
+        if target.contains("-apple-") {
             // Update the library’s install name to reflect that it has been renamed.
             apple_darwin_update_library_name(builder, &dst, &format!("@rpath/{}", runtime.name));
             // Upon renaming the install name, the code signature of the file will invalidate,
