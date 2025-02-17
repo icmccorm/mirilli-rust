@@ -3,8 +3,8 @@ language = "C++"
 sys_includes = ["stdint.h"]
 no_includes = true
 documentation = true
-include_guard = "BSANRT_H"
+include_guard = "BSAN_RT_H"
 
 [parse]
 parse_deps = true
-include = ["bsan/src/lib.rs", "miri"]
+include = ["bsan/src/lib.rs"]
