@@ -6,12 +6,11 @@ sanitizers = true
 build-stage = 1
 test-stage = 1
 docs = false
-extended = false
+extended = true
 tools = [
-    "libbsan",
+    "bsan-rt",
     "bsan",
     "cargo-bsan",
-    "bsan-rt",
 ]
 
 [rust]
