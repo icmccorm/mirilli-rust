@@ -13,6 +13,7 @@ tools = [
 
 [rust]
 description = "BorrowSanitizer"
+llvm-tools = true
 
 [llvm]
 download-ci-llvm = false

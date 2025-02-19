@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 env_logger = "0.11.5"
+libc = "0.2.169"
 log = "0.4.22"
 
 [lib]
@@ -14,4 +15,4 @@ test = true     # we have unit tests
 doctest = false # but no doc tests
 
 [build-dependencies]
-cbindgen = "0.27.0"
+cbindgen = "0.28.0"

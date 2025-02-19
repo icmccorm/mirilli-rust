@@ -10,5 +10,5 @@ fn main() {
         .with_crate(crate_dir.clone())
         .generate()
         .expect("Unable to generate bindings")
-        .write_to_file(Path::new(&out_dir).join(lib_name));
+        .write_to_file(Path::new(&out_dir).join(format!("{lib_name}.h")));
 }

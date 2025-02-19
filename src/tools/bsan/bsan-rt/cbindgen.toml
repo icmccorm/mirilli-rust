@@ -1,10 +1,11 @@
-language = "C++"
-
+language = "C"
 sys_includes = ["stdint.h"]
 no_includes = true
-documentation = true
-include_guard = "BSAN_RT_H"
+documentation = false
+include_guard = "BSANRT_H"
+namespace = "bsan_rt"
+cpp_compat = true
 
 [parse]
 parse_deps = true
-include = ["bsan/src/lib.rs"]
+include = ["src/lib.rs"]  

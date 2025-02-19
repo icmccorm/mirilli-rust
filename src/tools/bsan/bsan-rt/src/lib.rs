@@ -1,46 +1,39 @@
+#![cfg_attr(not(test), no_std)]
 #![feature(strict_overflow_ops)]
 #![allow(unused)]
 
-mod shadow;
+#[cfg(not(test))]
+use core::panic::PanicInfo;
 
+mod shadow;
 use core::ffi::c_void;
 use core::num::NonZero;
 
-use log::info;
+#[no_mangle]
+extern "C" fn bsan_init() {}
 
 #[no_mangle]
-extern "C" fn bsan_init() {
-    let _ = env_logger::builder().try_init();
-    info!("Initialized global state");
-}
-
-#[no_mangle]
-extern "C" fn bsan_expose_tag(ptr: *mut c_void) {
-    info!("Exposed tag for pointer: {:?}", ptr);
-}
+extern "C" fn bsan_expose_tag(ptr: *mut c_void) {}
 
 #[no_mangle]
 extern "C" fn bsan_retag(ptr: *mut c_void, retag_kind: u8, place_kind: u8) -> u64 {
-    info!("Retagged pointer: {:?}", ptr);
     0
 }
 
 #[no_mangle]
-extern "C" fn bsan_read(ptr: *mut c_void, access_size: u64) {
-    info!("Reading {} bytes starting at address: {:?}", access_size, ptr);
-}
+extern "C" fn bsan_read(ptr: *mut c_void, access_size: u64) {}
 
 #[no_mangle]
-extern "C" fn bsan_write(ptr: *mut c_void, access_size: u64) {
-    info!("Writing {} bytes starting at address: {:?}", access_size, ptr);
-}
+extern "C" fn bsan_write(ptr: *mut c_void, access_size: u64) {}
 
 #[no_mangle]
-extern "C" fn bsan_func_entry() {
-    info!("Entered function");
-}
+extern "C" fn bsan_func_entry() {}
 
 #[no_mangle]
-extern "C" fn bsan_func_exit() {
-    info!("Exited function");
+extern "C" fn bsan_func_exit() {}
+
+#[cfg(not(test))]
+#[panic_handler]
+fn panic(info: &PanicInfo<'_>) -> ! {
+    loop {}
 }
