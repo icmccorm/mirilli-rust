@@ -10,4 +10,4 @@ fn main() {
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file(Path::new(&out_dir).join(format!("bsan_rt.h")));
-    }
+}

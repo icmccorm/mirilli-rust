@@ -1,6 +1,7 @@
-use core::alloc::{Layout, Allocator, AllocError};
-use core::ptr::NonNull;
+use core::alloc::{AllocError, Allocator, Layout};
 use core::mem::{self, zeroed};
+use core::ptr::NonNull;
+
 use libc::{c_int, c_void, off_t};
 
 pub type MMap = unsafe extern "C" fn(*mut c_void, usize, c_int, c_int, c_int, i64) -> *mut c_void;

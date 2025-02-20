@@ -16,7 +16,6 @@ mod shadow;
 use core::cell::UnsafeCell;
 use core::ffi::c_void;
 use core::num::NonZero;
-
 #[cfg(not(test))]
 use core::panic::PanicInfo;
 
@@ -44,7 +43,6 @@ extern "C" fn bsan_func_entry() {}
 
 #[no_mangle]
 extern "C" fn bsan_func_exit() {}
-
 
 #[cfg(not(test))]
 #[panic_handler]
