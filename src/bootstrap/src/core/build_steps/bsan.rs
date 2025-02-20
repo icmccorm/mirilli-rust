@@ -76,14 +76,14 @@ impl Step for BsanRT {
         }
         // On targets that build BSAN as a static runtime, we need to manually add in the object files
         // for the Rust runtime using llvm-ar (see below). If the C++ sources haven't changed, then CMake
-        // will not rebuild or relink the C++ component. However,  the name and quanity of the objects from
-        // the Rust runtimeis subject to change, so there's no way to detect if a prebuilt copy of the C++
+        // will not rebuild or relink the C++ component. However,  the name and quanity of the objects from 
+        // the Rust runtimeis subject to change, so there's no way to detect if a prebuilt copy of the C++ 
         // runtime already contains objects from a prior build of the Rust component. To avoid name clashes
         // due to this issue, we just ensure that the C++ runtime is relinked fresh each time, which
         // is relatively inexpensive.
         if cpp_runtime.path.exists() {
             fs::remove_file(&cpp_runtime.path).unwrap();
-        }
+        }      
 
         let _guard = builder.msg_unstaged(Kind::Build, "bsan", self.target);
         let _time = helpers::timeit(builder);
@@ -131,13 +131,13 @@ impl Step for BsanRT {
         cfg.build();
 
         // If we're building BSAN as a static library, then we need to manually
-        // patch-in our Rust component, since there doesn't appear to be a straightforward
+        // patch-in our Rust component, since there doesn't appear to be a straightforward 
         // way to declare an external static archive (libbsan_rt.a) as a build dependency
         // of another static archive (libclang-rt-<arch>.bsan.a) in CMake—at least, not if
         // the external archive contains an unknown, varying quantity of object files.
         if !is_dylib(&cpp_runtime.name) {
             let temp_dir = builder.build.tempdir().join("bsan-rt");
-            if temp_dir.exists() {
+            if temp_dir.exists(){
                 fs::remove_dir_all(&temp_dir).unwrap();
             }
             fs::create_dir_all(&temp_dir).unwrap();
@@ -151,15 +151,14 @@ impl Step for BsanRT {
                 .arg("--keep-global-symbol=bsan_*")
                 .arg(&rust_runtime_path)
                 .run(builder);
-
+            
             // Then, we unpack the Rust archive into a collection of object files.
             // It *would* be possible to list these files as a CMake dependency, but that
             // would break rebuilds, since the name and quantity of object files in the archive
-            // will change throughout development.
+            // will change throughout development. 
             let llvm_ar = bindir.join(exe("llvm-ar", compiler.host));
             command(&llvm_ar).current_dir(&temp_dir).arg("-x").arg(rust_runtime_path).run(builder);
-            let file_names: Vec<String> = fs::read_dir(&temp_dir)
-                .unwrap()
+            let file_names: Vec<String> = fs::read_dir(&temp_dir).unwrap()
                 .filter_map(|entry| {
                     let path = entry.ok().unwrap().path();
                     if path.is_file() { path.to_str().map(|s| s.to_owned()) } else { None }
@@ -174,18 +173,14 @@ impl Step for BsanRT {
                 .args(file_names)
                 .run(builder);
         }
-
+        
         let libdir = builder.sysroot_target_libdir(compiler, target);
         let dst = libdir.join(&cpp_runtime.name);
         builder.copy_link(&cpp_runtime.path, &dst);
 
         if target.contains("-apple-") {
             // Update the library’s install name to reflect that it has been renamed.
-            apple_darwin_update_library_name(
-                builder,
-                &dst,
-                &format!("@rpath/{}", &cpp_runtime.name),
-            );
+            apple_darwin_update_library_name(builder, &dst, &format!("@rpath/{}", &cpp_runtime.name));
             // Upon renaming the install name, the code signature of the file will invalidate,
             // so we will sign it again.
             apple_darwin_sign_file(builder, &dst);
@@ -253,7 +248,6 @@ impl Step for BsanRTCore {
         cargo.rustflag("-Clto");
         cargo.rustflag("-Cpanic=abort");
         cargo.env("BSAN_HEADER_DIR", builder.cargo_out(compiler, mode, target));
-
         let build_success = compile::stream_cargo(builder, cargo, vec![], &mut |_| {});
         if !build_success {
             crate::exit!(1);
