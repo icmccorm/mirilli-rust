@@ -1,12 +1,15 @@
 use core::cell::SyncUnsafeCell;
 use core::sync::atomic::AtomicUsize;
 
-use crate::BsanAllocator;
+use crate::{BsanAllocator};
+
+#[cfg(test)]
+use crate::TEST_ALLOC;
 
 #[derive(Debug)]
 pub struct GlobalContext {
-    pub allocator: BsanAllocator,
-    pub next_alloc_id: AtomicUsize,
+    allocator: BsanAllocator,
+    next_alloc_id: AtomicUsize,
 }
 
 impl GlobalContext {
