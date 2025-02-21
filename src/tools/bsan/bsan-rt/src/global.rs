@@ -5,8 +5,8 @@ use crate::BsanAllocator;
 
 #[derive(Debug)]
 pub struct GlobalContext {
-    allocator: BsanAllocator,
-    next_alloc_id: AtomicUsize,
+    pub allocator: BsanAllocator,
+    pub next_alloc_id: AtomicUsize,
 }
 
 impl GlobalContext {
