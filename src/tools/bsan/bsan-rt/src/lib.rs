@@ -10,7 +10,6 @@ extern crate alloc;
 use core::cell::UnsafeCell;
 use core::ffi::c_void;
 use core::num::NonZero;
-
 #[cfg(not(test))]
 use core::panic::PanicInfo;
 
@@ -18,10 +17,9 @@ mod global;
 use global::{global_ctx, init_global_ctx};
 
 mod bsan_alloc;
-pub use bsan_alloc::{BsanAllocator};
-
+pub use bsan_alloc::BsanAllocator;
 #[cfg(test)]
-pub use bsan_alloc::{TEST_ALLOC};
+pub use bsan_alloc::TEST_ALLOC;
 
 mod shadow;
 

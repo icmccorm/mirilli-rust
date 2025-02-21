@@ -1,8 +1,7 @@
 use core::cell::SyncUnsafeCell;
 use core::sync::atomic::AtomicUsize;
 
-use crate::{BsanAllocator};
-
+use crate::BsanAllocator;
 #[cfg(test)]
 use crate::TEST_ALLOC;
 
